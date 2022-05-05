@@ -1,7 +1,10 @@
 {
   "name": "BMX-token",
+  "version": "0.2.0",
+  "private": true,
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.5",
+    "@nomiclabs/hardhat-etherscan": "^3.0.3",
     "@nomiclabs/hardhat-waffle": "^2.0.3",
     "chai": "^4.3.6",
     "ethereum-waffle": "^3.4.4",
@@ -10,6 +13,10 @@
   "scripts": {
     "accounts": "npx hardhat accounts",
     "compile": "npx hardhat compile",
-    "test": "npx hardhat test"
+    "test": "npx hardhat test",
+    "deploy:mainnet": "npx hardhat run scripts/deploy.js --network mainnet",
+    "deploy:testnet": "npx hardhat run scripts/deploy.js --network testnet",
+    "verify:mainnet": "hardhat verify 0xD3A15e0F6fFC2B35c72a1955A1BEd2Be77d66852 --constructor-args arguments.js --network mainnet",
+    "verify:testnet": "hardhat verify 0xD3A15e0F6fFC2B35c72a1955A1BEd2Be77d66852 --constructor-args arguments.js --network testnet"
   }
 }

@@ -1,5 +1,9 @@
 require("@nomiclabs/hardhat-waffle");
+require("@nomiclabs/hardhat-etherscan");
+const fs = require('fs');
 
+const PRIVATE_KEY = fs.readFileSync(".secret").toString().trim() || "01234567890123456789";
+const BSC_API_KEY = fs.readFileSync(".bsc_api_key").toString().trim() || "01234567890123456789";
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
 task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
@@ -25,5 +29,23 @@ module.exports = {
         runs: 1000,
       },
     },
+  },
+  defaultNetwork: "mainnet",
+  networks: {
+    mainnet: {
+      url: `https://bsc-dataseed1.ninicoin.io`,
+      accounts: [PRIVATE_KEY],
+      chainId: 56,
+      saveDeployments: true,
+    },
+    testnet: {
+      url: `https://data-seed-prebsc-1-s1.binance.org:8545`,
+      accounts: [PRIVATE_KEY],
+      chainId: 97,
+      saveDeployments: true,
+    },
+  },
+  etherscan: {
+    apiKey: BSC_API_KEY,
   },
 };

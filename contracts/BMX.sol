@@ -178,7 +178,11 @@ contract BMX is Ownable, Stakeable {
      * @notice transferableToken() is a function to calculate the transferable amount of token for one user.
      * @param account : user address
      */
-    function _transferableToken(address account) internal view returns (uint256) {
+    function _transferableToken(address account)
+        internal
+        view
+        returns (uint256)
+    {
         uint256 _nubmerOfMonths = _calcMonth();
         uint256 _transferableBalance = _balances[account] -
             ((100 - restrictPercentage * _nubmerOfMonths) *
@@ -319,10 +323,12 @@ contract BMX is Ownable, Stakeable {
         _balances[recipient] = _balances[recipient] + amount;
         _burn(sender, _wastingFee);
 
-				if (_publicSaleDate == 0) {
-					_presaledBalances[sender] = _presaledBalances[sender] - amount;
-					_presaledBalances[recipient] = _presaledBalances[recipient] + amount;
-				}
+        if (_publicSaleDate == 0) {
+            _presaledBalances[sender] = _presaledBalances[sender] - amount;
+            _presaledBalances[recipient] =
+                _presaledBalances[recipient] +
+                amount;
+        }
 
         emit Transfer(sender, recipient, amount);
     }

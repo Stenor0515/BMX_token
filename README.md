@@ -13,3 +13,7 @@ npx hardhat node
 node scripts/sample-script.js
 npx hardhat help
 ```
+
+1. You should replace the contents of .secret file as your account private key.
+2. Please run "yarn deploy" to deploy the contract on mainnet.
+3. Please run "yarn deploy-testnet" to deploy the contract on testnet.
