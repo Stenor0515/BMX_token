@@ -1,7 +1,11 @@
+const converter = require("ethereum-unit-converter");
+require("dotenv").config();
+
+const totalSupply = converter(process.env.TOTAL_SUPPLY, "ether", "wei");
 module.exports = [
-  "BMX Token",
-  "BMX",
-  18,
-  100000,
-  "0x351E86AC58cFeDdBa9e637cb238671874ffDE245",
+  process.env.TOKEN_NAME,
+  process.env.TOKEN_SYMBOL,
+  process.env.TOKEN_DECIMAL,
+  totalSupply,
+  process.env.ACCOUNT_ADDRESS,
 ];

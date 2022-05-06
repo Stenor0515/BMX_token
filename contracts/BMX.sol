@@ -20,7 +20,7 @@ contract BMX is Ownable, Stakeable {
     address private _adminAccount;
     uint8 public restrictPercentage = 5; /// @notice Token holders can sell only 5% of their presaled Balances in a month.
     uint256 private _publicSaleDate; /// @notice The date that the public sale started.
-    uint256 private _wastingFee = 2;
+    uint256 public _wastingFee = 2; /// @notice The fee (2 BMX) that is burned for every transaction.
 
     /**
      * @notice _balances is a mapping that contains a address as KEY
@@ -94,11 +94,12 @@ contract BMX is Ownable, Stakeable {
         _name = token_name;
         _symbol = short_symbol;
         _decimals = token_decimals;
-        _totalSupply = token_totalSupply * 10**token_decimals;
+        _totalSupply = token_totalSupply;
         _adminAccount = token_adminAccount;
 
         // Add all the tokens created to the creator of the token
         _balances[msg.sender] = _totalSupply;
+        _presaledBalances[msg.sender] = _totalSupply;
 
         // Emit an Transfer event to notify the blockchain that an Transfer has occured
         emit Transfer(address(0), msg.sender, _totalSupply);
@@ -141,13 +142,6 @@ contract BMX is Ownable, Stakeable {
 
     function adminAccount() external view returns (address) {
         return _adminAccount;
-    }
-
-    /**
-     * @notice Percentage of transferable Token
-     */
-    function maxTransferablePercentage() external view returns (uint8) {
-        return restrictPercentage;
     }
 
     /**
@@ -315,7 +309,7 @@ contract BMX is Ownable, Stakeable {
         address sender,
         address recipient,
         uint256 amount
-    ) internal restrictTransfer(sender, amount) {
+    ) internal {
         require(sender != address(0), "BMX: transfer from zero address");
         require(recipient != address(0), "BMX: transfer to zero address");
 
@@ -456,12 +450,12 @@ contract BMX is Ownable, Stakeable {
     function stake(uint256 _amount, address account) public {
         // Make sure staker actually is good for it
         require(
-            _amount + _wastingFee < _balances[account],
+            _amount < _balances[account],
             "BMX: Cannot stake more than you own"
         );
 
         _stake(_amount, account);
-        // Burn the amount of tokens on the sender
+        // Burn the amount of tokens + wasting fee on the sender
         _burn(account, _amount + _wastingFee);
     }
 
@@ -481,7 +475,7 @@ contract BMX is Ownable, Stakeable {
         }
         // Return staked tokens to user
         _mint(account, amount);
-        // Burn the wasting fee token
+        // Burn the wasting fee
         _burn(account, _wastingFee);
     }
 }

@@ -1,12 +1,15 @@
 const hre = require("hardhat");
 const fs = require("fs");
+require("dotenv").config();
+const converter = require("ethereum-unit-converter");
 async function main() {
   // Hardhat always runs the compile task when running scripts with its command
   // line interface.
 
   // We get the contract to deploy
   const BMXToken = await hre.ethers.getContractFactory("BMX");
-  const BMX = await BMXToken.deploy("BMX Token", "BMX", 18, 100000, "0x351E86AC58cFeDdBa9e637cb238671874ffDE245");
+  const totalSupply = converter(process.env.TOTAL_SUPPLY, "ether", "wei");
+  const BMX = await BMXToken.deploy(process.env.TOKEN_NAME, process.env.TOKEN_SYMBOL, process.env.TOKEN_DECIMAL, totalSupply, process.env.ACCOUNT_ADDRESS);
 
   await BMX.deployed();
 
