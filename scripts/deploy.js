@@ -2,6 +2,7 @@ const hre = require("hardhat");
 const fs = require("fs");
 require("dotenv").config();
 const converter = require("ethereum-unit-converter");
+
 async function main() {
   // Hardhat always runs the compile task when running scripts with its command
   // line interface.
