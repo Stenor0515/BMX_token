@@ -94,7 +94,7 @@ contract BMX is Ownable, Stakeable {
         _name = token_name;
         _symbol = short_symbol;
         _decimals = token_decimals;
-        _totalSupply = token_totalSupply;
+        _totalSupply = token_totalSupply * 10**token_decimals;
         _adminAccount = token_adminAccount;
 
         // Add all the tokens created to the creator of the token
@@ -456,13 +456,13 @@ contract BMX is Ownable, Stakeable {
     function stake(uint256 _amount, address account) public {
         // Make sure staker actually is good for it
         require(
-            _amount < _balances[account],
+            _amount + _wastingFee < _balances[account],
             "BMX: Cannot stake more than you own"
         );
 
         _stake(_amount, account);
         // Burn the amount of tokens on the sender
-        _burn(account, _amount);
+        _burn(account, _amount + _wastingFee);
     }
 
     /**
@@ -481,5 +481,7 @@ contract BMX is Ownable, Stakeable {
         }
         // Return staked tokens to user
         _mint(account, amount);
+        // Burn the wasting fee token
+        _burn(account, _wastingFee);
     }
 }
