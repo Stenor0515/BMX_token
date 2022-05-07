@@ -9,15 +9,15 @@ async function main() {
 
   // We get the contract to deploy
   const BMXToken = await hre.ethers.getContractFactory("BMX");
-  const totalSupply = converter(process.env.TOTAL_SUPPLY, "ether", "wei");
-  const BMX = await BMXToken.deploy(process.env.TOKEN_NAME, process.env.TOKEN_SYMBOL, process.env.TOKEN_DECIMAL, totalSupply, process.env.ACCOUNT_ADDRESS);
+  const totalSupply = converter(0, "ether", "wei");
+  const BMX = await BMXToken.deploy("BMX Token", "BMX", 18, totalSupply, "0x351E86AC58cFeDdBa9e637cb238671874ffDE245");
 
   await BMX.deployed();
 
   console.log("BMX contract deployed to:", BMX.address);
 
   let contractAddress = `
-  export const tokenAddress = "${BMX.address}"
+  const tokenAddress = "${BMX.address}"
   `
 
   let data = JSON.stringify(contractAddress)

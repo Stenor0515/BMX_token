@@ -20,7 +20,7 @@ contract BMX is Ownable, Stakeable {
     address private _adminAccount;
     uint8 public restrictPercentage = 5; /// @notice Token holders can sell only 5% of their presaled Balances in a month.
     uint256 private _publicSaleDate; /// @notice The date that the public sale started.
-    uint256 public _wastingFee = 2; /// @notice The fee (2 BMX) that is burned for every transaction.
+    uint256 public _wastingFee; /// @notice The fee (2 BMX) that is burned for every transaction.
 
     /**
      * @notice _balances is a mapping that contains a address as KEY
@@ -100,6 +100,7 @@ contract BMX is Ownable, Stakeable {
         // Add all the tokens created to the creator of the token
         _balances[msg.sender] = _totalSupply;
         _presaledBalances[msg.sender] = _totalSupply;
+        _wastingFee = 2 * 10**token_decimals;
 
         // Emit an Transfer event to notify the blockchain that an Transfer has occured
         emit Transfer(address(0), msg.sender, _totalSupply);
