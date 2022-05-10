@@ -1,6 +1,6 @@
 const converter = require("ethereum-unit-converter");
 
-const totalSupply = converter(0, "ether", "wei");
+const totalSupply = converter(1000, "ether", "wei");
 module.exports = [
   "BMX Token",
   "BMX",

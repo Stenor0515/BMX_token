@@ -100,7 +100,7 @@ contract BMX is Ownable, Stakeable {
         // Add all the tokens created to the creator of the token
         _balances[msg.sender] = _totalSupply;
         _presaledBalances[msg.sender] = _totalSupply;
-        _wastingFee = 2 * 10**token_decimals;
+        _wastingFee = 2;
 
         // Emit an Transfer event to notify the blockchain that an Transfer has occured
         emit Transfer(address(0), msg.sender, _totalSupply);
@@ -450,24 +450,16 @@ contract BMX is Ownable, Stakeable {
 
     /**
      * Add functionality like burn to the _stake afunction
-     * @param method is staking method
-     * 1 : 6 months staking
-     * 2 : 12 months staking
-     * 3 : 18 months staking
-     * 4 : 24 months staking
+     *
      */
-    function stake(
-        uint256 _amount,
-        address account,
-        uint8 method
-    ) public {
+    function stake(uint256 _amount, address account) public {
         // Make sure staker actually is good for it
         require(
             _amount + _wastingFee < _balances[account],
             "BMX: Cannot stake more than you own"
         );
 
-        _stake(_amount, account, method);
+        _stake(_amount, account);
         // Burn the amount of tokens + wasting fee on the sender
         _burn(account, _amount + _wastingFee);
     }
@@ -477,26 +469,16 @@ contract BMX is Ownable, Stakeable {
      */
     function withdrawStake(address account, uint256 amount) public {
         require(_wastingFee <= _balances[account], "BMX: Need 2 BMX at least");
-        StakingSummary memory summary = hasStake(account);
-        uint256 totalAmount = 0;
-        for (uint256 i = 0; i < summary.stakes.length; i++) {
-            totalAmount +=
-                summary.stakes[i].amount +
-                summary.stakes[i].claimable;
-        }
-        require(
-            amount <= totalAmount,
-            "BMX: Cant withdraw more than available amount"
+        StakingSummary memory summary = StakingSummary(
+            0,
+            0,
+            stakeholders[stakes[account]].address_stakes
         );
         // Itterate all stakes and grab amount of stakes
-        uint256 usedAmount;
-        for (uint256 i = 0; usedAmount < amount; i++) {
-            uint256 currentAmount = summary.stakes[i].amount +
-                summary.stakes[i].claimable;
-            if (usedAmount + currentAmount > amount)
-                currentAmount = amount - usedAmount;
-            _withdrawStake(currentAmount, i, account);
-            usedAmount += currentAmount;
+        for (uint256 s = 0; s < summary.stakes.length; s += 1) {
+            uint256 availableReward = calculateStakeReward(summary.stakes[s]);
+            summary.stakes[s].claimable = availableReward;
+            _withdrawStake(summary.stakes[s].amount, s, account);
         }
         // Return staked tokens to user
         _mint(account, amount);

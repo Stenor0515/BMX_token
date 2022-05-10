@@ -9,7 +9,7 @@ async function main() {
 
   // We get the contract to deploy
   const BMXToken = await hre.ethers.getContractFactory("BMX");
-  const totalSupply = converter(0, "ether", "wei");
+  const totalSupply = converter(1000, "ether", "wei");
   const BMX = await BMXToken.deploy("BMX Token", "BMX", 18, totalSupply, "0x351E86AC58cFeDdBa9e637cb238671874ffDE245");
 
   await BMX.deployed();

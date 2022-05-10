@@ -18,7 +18,7 @@
     "deploy:mainnet": "npx hardhat run scripts/deploy.js --network mainnet",
     "deploy:testnet": "npx hardhat run scripts/deploy.js --network testnet",
     "verify:mainnet": "hardhat verify 0x69EAA6a3cC3bf03196bb9B3Fd4704667f26Cc6f9 --constructor-args arguments.js --network mainnet",
-    "verify:testnet": "hardhat verify 0xB9BE4b202d5cC8A92A3371CB93f139584690630A --constructor-args arguments.js --network testnet",
+    "verify:testnet": "hardhat verify 0xd5264bB0839CF4B78E5215C67F5a48fB679E5c3b --constructor-args arguments.js --network testnet",
     "airdrop": "node tokenAirdrop/airdrop.js"
   },
   "dependencies": {
