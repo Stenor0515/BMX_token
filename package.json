@@ -8,6 +8,8 @@
     "@nomiclabs/hardhat-waffle": "^2.0.3",
     "chai": "^4.3.6",
     "csv-parse": "^5.0.4",
+    "dotenv": "^16.0.1",
+    "ethereum-unit-converter": "^0.0.17",
     "ethereum-waffle": "^3.4.4",
     "ethers": "^5.6.5"
   },
@@ -17,12 +19,8 @@
     "test": "npx hardhat test",
     "deploy:mainnet": "npx hardhat run scripts/deploy.js --network mainnet",
     "deploy:testnet": "npx hardhat run scripts/deploy.js --network testnet",
-    "verify:mainnet": "hardhat verify 0x69EAA6a3cC3bf03196bb9B3Fd4704667f26Cc6f9 --constructor-args arguments.js --network mainnet",
-    "verify:testnet": "hardhat verify 0xd5264bB0839CF4B78E5215C67F5a48fB679E5c3b --constructor-args arguments.js --network testnet",
+    "verify:mainnet": "npx hardhat run scripts/verify.js --network mainnet",
+    "verify:testnet": "npx hardhat run scripts/verify.js --network testnet",
     "airdrop": "node tokenAirdrop/airdrop.js"
-  },
-  "dependencies": {
-    "dotenv": "^16.0.0",
-    "ethereum-unit-converter": "^0.0.17"
   }
 }

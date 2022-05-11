@@ -7,12 +7,11 @@ const PRIVATE_KEY = fs.readFileSync(".secret").toString().trim() || "01234567890
 
 // Contract ABI
 const contractAbi = require('../artifacts/contracts/BMX.sol/BMX.json');
-const { tokenAddress } = require("../contractAddress");
-console.log(tokenAddress.tokenAddress)
-const JsonBatchRpcProvider = new ethers.providers.JsonRpcProvider("https://data-seed-prebsc-1-s1.binance.org:8545");
-const signer = new ethers.Wallet(PRIVATE_KEY, JsonBatchRpcProvider);
+const tokenAddress = require("../contractAddress");
+const JsonRpcProvider = new ethers.providers.JsonRpcProvider("https://data-seed-prebsc-1-s1.binance.org:8545");
+const signer = new ethers.Wallet(PRIVATE_KEY, JsonRpcProvider);
 
-const BMX = new ethers.Contract(tokenAddress.tokenAddress, contractAbi.abi, signer);
+const BMX = new ethers.Contract(tokenAddress, contractAbi.abi, signer);
 
 const readStream = (path) => new Promise((resolve, reject) => {
   const parser = parse({ columns: true }, function (err, records) {

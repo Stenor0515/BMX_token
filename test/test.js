@@ -4,7 +4,7 @@ const { ethers } = require("hardhat");
 describe("BMX token", function () {
   it("Should return the decimals, symbol, name, totalSupply and admin balance", async function () {
     const BMXToken = await ethers.getContractFactory("BMX");
-    const BMX = await BMXToken.deploy("Bmxtoken", "BMX", 18, 100000, "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266");
+    const BMX = await BMXToken.deploy("Bmxtoken", "BMX", 18, 100000, "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266", 2);
     await BMX.deployed();
 
     // Get signers
@@ -23,7 +23,7 @@ describe("BMX token", function () {
 
   it("Should return the result of restrict transfer", async function () {
     const BMXToken = await ethers.getContractFactory("BMX");
-    const BMX = await BMXToken.deploy("Bmxtoken", "BMX", 18, 100000, "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266");
+    const BMX = await BMXToken.deploy("Bmxtoken", "BMX", 18, 100000, "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266", 2);
     await BMX.deployed();
 
     // Get signers
@@ -62,7 +62,7 @@ describe("BMX token", function () {
 
   it("Should return the result of general transfer", async function () {
     const BMXToken = await ethers.getContractFactory("BMX");
-    const BMX = await BMXToken.deploy("Bmxtoken", "BMX", 18, 100000, "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266");
+    const BMX = await BMXToken.deploy("Bmxtoken", "BMX", 18, 100000, "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266", 2);
     await BMX.deployed();
 
     // Get signers
@@ -97,7 +97,7 @@ describe("BMX token", function () {
 
   it("Staking test step.", async function () {
     const BMXToken = await ethers.getContractFactory("BMX");
-    const BMX = await BMXToken.deploy("Bmxtoken", "BMX", 18, 100000, "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266");
+    const BMX = await BMXToken.deploy("Bmxtoken", "BMX", 18, 100000, "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266", 2);
     await BMX.deployed();
 
     // Get signers

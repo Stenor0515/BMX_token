@@ -82,14 +82,15 @@ contract BMX is Ownable, Stakeable {
      * _short_symbol = Short Symbol name for the token
      * token_decimals = The decimal precision of the Token, defaults 18
      * _totalSupply is how much Tokens there are totally
-     * max_transferable_percentage is how much Tokens users can transfer in a month
+     * _wastingFee is the fee of every transactions
      */
     constructor(
         string memory token_name,
         string memory short_symbol,
         uint8 token_decimals,
         uint256 token_totalSupply,
-        address token_adminAccount
+        address token_adminAccount,
+        uint256 wasting_fee
     ) {
         _name = token_name;
         _symbol = short_symbol;
@@ -100,7 +101,7 @@ contract BMX is Ownable, Stakeable {
         // Add all the tokens created to the creator of the token
         _balances[msg.sender] = _totalSupply;
         _presaledBalances[msg.sender] = _totalSupply;
-        _wastingFee = 2 * 10**token_decimals;
+        _wastingFee = wasting_fee * 10**token_decimals;
 
         // Emit an Transfer event to notify the blockchain that an Transfer has occured
         emit Transfer(address(0), msg.sender, _totalSupply);
@@ -478,14 +479,15 @@ contract BMX is Ownable, Stakeable {
     function withdrawStake(address account, uint256 amount) public {
         require(_wastingFee <= _balances[account], "BMX: Need 2 BMX at least");
         StakingSummary memory summary = hasStake(account);
-        uint256 totalAmount = 0;
-        for (uint256 i = 0; i < summary.stakes.length; i++) {
-            totalAmount +=
-                summary.stakes[i].amount +
-                summary.stakes[i].claimable;
-        }
+        uint256 totalWithdrawalbleAmount = summary.total_amount +
+            summary.total_withdrawable_reward;
+        // for (uint256 i = 0; i < summary.stakes.length; i++) {
+        //     totalAmount +=
+        //         summary.stakes[i].amount +
+        //         summary.stakes[i].claimable;
+        // }
         require(
-            amount <= totalAmount,
+            amount <= totalWithdrawalbleAmount,
             "BMX: Cant withdraw more than available amount"
         );
         // Itterate all stakes and grab amount of stakes

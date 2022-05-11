@@ -47,6 +47,7 @@ contract Stakeable {
     struct StakingSummary {
         uint256 total_amount;
         uint256 total_reward;
+        uint256 total_withdrawable_reward;
         Stake[] stakes;
     }
 
@@ -231,22 +232,30 @@ contract Stakeable {
         // totalStakeAmount is used to count total staked amount of the address
         uint256 totalStakeAmount;
         uint256 totalRewardAmount;
+        uint256 totalWithdrawableRewardAmount;
         // Keep a summary in memory since we need to calculate this
         StakingSummary memory summary = StakingSummary(
-            0,
-            0,
+            totalStakeAmount,
+            totalRewardAmount,
+            totalWithdrawableRewardAmount,
             stakeholders[stakes[_staker]].address_stakes
         );
         // Itterate all stakes and grab amount of stakes
         for (uint256 s = 0; s < summary.stakes.length; s += 1) {
             uint256 availableReward = calculateStakeReward(summary.stakes[s]);
             summary.stakes[s].claimable = availableReward;
-            totalRewardAmount = totalRewardAmount + availableReward;
-            totalStakeAmount = totalStakeAmount + availableReward;
+            totalRewardAmount += availableReward;
+            totalStakeAmount += summary.stakes[s].amount;
+            // Withdrawable reward calculation
+            uint256 _months = (block.timestamp - summary.stakes[s].since) /
+                30 days;
+            if (_months >= 6 * summary.stakes[s].method)
+                totalWithdrawableRewardAmount += availableReward;
         }
         // Assign calculate amount to summary
         summary.total_amount = totalStakeAmount;
         summary.total_reward = totalRewardAmount;
+        summary.total_withdrawable_reward = totalWithdrawableRewardAmount;
         return summary;
     }
 }
