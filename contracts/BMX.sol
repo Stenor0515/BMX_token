@@ -57,6 +57,11 @@ contract BMX is Ownable, Stakeable {
     );
 
     /**
+     * @notice WithdrawStake is emittied when a user withdraw his staked tokens
+     */
+    event WithdrawStake(address indexed user, uint256 amount);
+
+    /**
      * @notice This modifier is to restrict that the users can't transfer more than 5% of thier balance per month.
      */
     modifier restrictTransfer(address account, uint256 amount) {
@@ -475,17 +480,13 @@ contract BMX is Ownable, Stakeable {
 
     /**
      * @notice withdrawStake is used to withdraw stakes from the account holder
+     * event {WithdrawStake}
      */
     function withdrawStake(address account, uint256 amount) public {
         require(_wastingFee <= _balances[account], "BMX: Need 2 BMX at least");
         StakingSummary memory summary = hasStake(account);
-        uint256 totalWithdrawalbleAmount = summary.total_amount +
-            summary.total_withdrawable_reward;
-        // for (uint256 i = 0; i < summary.stakes.length; i++) {
-        //     totalAmount +=
-        //         summary.stakes[i].amount +
-        //         summary.stakes[i].claimable;
-        // }
+        // make users cant withdraw unless the staking ended
+        uint256 totalWithdrawalbleAmount = summary.total_withdrawable_reward;
         require(
             amount <= totalWithdrawalbleAmount,
             "BMX: Cant withdraw more than available amount"
@@ -504,5 +505,7 @@ contract BMX is Ownable, Stakeable {
         _mint(account, amount);
         // Burn the wasting fee
         _burn(account, _wastingFee);
+
+        emit WithdrawStake(account, amount);
     }
 }

@@ -250,7 +250,9 @@ contract Stakeable {
             uint256 _months = (block.timestamp - summary.stakes[s].since) /
                 30 days;
             if (_months >= 6 * summary.stakes[s].method)
-                totalWithdrawableRewardAmount += availableReward;
+                totalWithdrawableRewardAmount +=
+                    summary.stakes[s].amount +
+                    availableReward;
         }
         // Assign calculate amount to summary
         summary.total_amount = totalStakeAmount;
