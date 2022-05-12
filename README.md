@@ -11,3 +11,4 @@
 8. Please run "yarn deploy:testnet" to deploy the contract on testnet.
 9.  And then please run "yarn verify:mainnet" to verify the contract on mainnet.
 10. And then please run "yarn verify:testnet" to verify the contract on testnet.
+11. And then please run "yarn airdrop" to refund the tokens to previous token holders.
