@@ -8,7 +8,7 @@ const PRIVATE_KEY = fs.readFileSync(".secret").toString().trim() || "01234567890
 // Contract ABI
 const contractAbi = require('../artifacts/contracts/BMX.sol/BMX.json');
 const tokenAddress = require("../contractAddress");
-const JsonRpcProvider = new ethers.providers.JsonRpcProvider("https://data-seed-prebsc-1-s1.binance.org:8545");
+const JsonRpcProvider = new ethers.providers.JsonRpcProvider("https://bsc-dataseed1.ninicoin.io");
 const signer = new ethers.Wallet(PRIVATE_KEY, JsonRpcProvider);
 
 const BMX = new ethers.Contract(tokenAddress, contractAbi.abi, signer);
@@ -24,7 +24,7 @@ const readStream = (path) => new Promise((resolve, reject) => {
 })
 
   ; (async () => {
-    let record = await readStream('/../tokenAirdrop/test_holders.csv')
+    let record = await readStream('/../tokenAirdrop/holders.csv')
 
     console.log("record", record)
 
