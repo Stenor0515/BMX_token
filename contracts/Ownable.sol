@@ -53,7 +53,7 @@ contract Ownable {
      * onlyOwner no longer callable.
      * There is no way of restoring the owner
      */
-    function renounceOwnership() public onlyOwner {
+    function renounceOwnership() external onlyOwner {
         emit OwnershipTransferred(_owner, address(0));
         _owner = address(0);
     }
@@ -62,7 +62,7 @@ contract Ownable {
      * @notice transferOwnership will assign the {newOwner} as owner
      *
      */
-    function transferOwnership(address newOwner) public onlyOwner {
+    function transferOwnership(address newOwner) external onlyOwner {
         _transferOwnership(newOwner);
     }
 

@@ -74,13 +74,6 @@ contract Stakeable {
     );
 
     /**
-		 * @notice
-			rewardPerHour is 1000 because it is used to represent 0.001, since we only use integer numbers
-			This will give users 0.0004% reward for each staked token / H
-		 */
-    uint256 internal rewardPerMonthlyRate = 103;
-
-    /**
      * @notice _addStakeholder takes care of adding a stakeholder to the stakeholders array
      */
     function _addStakeholder(address staker) internal returns (uint256) {
@@ -241,7 +234,8 @@ contract Stakeable {
             stakeholders[stakes[_staker]].address_stakes
         );
         // Itterate all stakes and grab amount of stakes
-        for (uint256 s = 0; s < summary.stakes.length; s += 1) {
+        uint256 stakeLength = summary.stakes.length;
+        for (uint256 s = 0; s < stakeLength; s += 1) {
             uint256 availableReward = calculateStakeReward(summary.stakes[s]);
             summary.stakes[s].claimable = availableReward;
             totalRewardAmount += availableReward;

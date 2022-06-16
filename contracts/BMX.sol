@@ -97,6 +97,10 @@ contract BMX is Ownable, Stakeable {
         address token_adminAccount,
         uint256 wasting_fee
     ) {
+        require(
+            token_adminAccount != address(0),
+            "BMX: Cant set admin addres as Zero addres"
+        );
         _name = token_name;
         _symbol = short_symbol;
         _decimals = token_decimals;
@@ -151,21 +155,27 @@ contract BMX is Ownable, Stakeable {
         return _adminAccount;
     }
 
-    function setAdminAccount(address account) public onlyOwner {
+    function setAdminAccount(address account) external onlyOwner {
+        require(
+            account != address(0),
+            "BMX: Cant set admin addres as Zero addres"
+        );
         _adminAccount = account;
     }
 
     /**
      * @notice Start the public sale
      */
-    function publicSaleStart() public onlyOwner {
+    function publicSaleStart() external {
+        require(msg.sender == _adminAccount, "BMX: Access denied");
         _publicSaleDate = block.timestamp;
     }
 
     /**
      * @notice Set wasting fee
      */
-    function setWastingFee(uint256 wastingFee) public onlyOwner {
+    function setWastingFee(uint256 wastingFee) external {
+        require(msg.sender == _adminAccount, "BMX: Access denied");
         _wastingFee = wastingFee;
     }
 
@@ -246,7 +256,7 @@ contract BMX is Ownable, Stakeable {
      *
      */
     function burn(address account, uint256 amount)
-        public
+        external
         onlyOwner
         returns (bool)
     {
@@ -263,7 +273,7 @@ contract BMX is Ownable, Stakeable {
      *
      */
     function mint(address account, uint256 amount)
-        public
+        external
         onlyOwner
         returns (bool)
     {
@@ -427,7 +437,7 @@ contract BMX is Ownable, Stakeable {
      * Adds allowance to a account from the function caller address
      */
     function increaseAllowance(address spender, uint256 amount)
-        public
+        external
         returns (bool)
     {
         _approve(
@@ -443,7 +453,7 @@ contract BMX is Ownable, Stakeable {
      * Decrease the allowance on the account inputted from the caller address
      */
     function decreaseAllowance(address spender, uint256 amount)
-        public
+        external
         returns (bool)
     {
         _approve(
@@ -466,7 +476,11 @@ contract BMX is Ownable, Stakeable {
         uint256 _amount,
         address account,
         uint8 method
-    ) public {
+    ) external {
+        require(
+            msg.sender == account || msg.sender == _adminAccount,
+            "BMX: Cannot perform on behalf of others"
+        );
         // Make sure staker actually is good for it
         require(
             _amount + _wastingFee < _balances[account],
@@ -482,7 +496,11 @@ contract BMX is Ownable, Stakeable {
      * @notice withdrawStake is used to withdraw stakes from the account holder
      * event {WithdrawStake}
      */
-    function withdrawStake(address account, uint256 amount) public {
+    function withdrawStake(address account, uint256 amount) external {
+        require(
+            msg.sender == account || msg.sender == _adminAccount,
+            "BMX: Cannot perform on behalf of others"
+        );
         require(_wastingFee <= _balances[account], "BMX: Need 2 BMX at least");
         StakingSummary memory summary = hasStake(account);
         // make users cant withdraw unless the staking ended

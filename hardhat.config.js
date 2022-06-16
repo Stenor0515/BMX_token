@@ -2,9 +2,6 @@ require("@nomiclabs/hardhat-waffle");
 require("@nomiclabs/hardhat-etherscan");
 const fs = require('fs');
 
-const contractAddress = require("./contractAddress");
-const constructorArguments = require("./arguments");
-
 const PRIVATE_KEY = fs.readFileSync(".secret").toString().trim() || "01234567890123456789";
 const BSC_API_KEY = fs.readFileSync(".bsc_api_key").toString().trim() || "01234567890123456789";
 // This is a sample Hardhat task. To learn how to create your own go to
