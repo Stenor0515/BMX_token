@@ -180,14 +180,15 @@ contract Stakeable {
         Stake memory current_stake = stakeholders[user_index].address_stakes[
             index
         ];
+        uint256 reward = calculateStakeReward(current_stake);
         require(
-            current_stake.amount >= amount,
+            current_stake.amount + reward >= amount,
             "Staking: Cannot withdraw more than you have staked"
         );
 
         // Remove by subtracting the money unstaked
 
-        if (current_stake.amount + current_stake.claimable == amount) {
+        if (current_stake.amount + reward == amount) {
             current_stake.amount = 0;
             delete stakeholders[user_index].address_stakes[index];
         } else {
