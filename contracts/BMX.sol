@@ -65,19 +65,21 @@ contract BMX is Ownable, Stakeable {
      * @notice This modifier is to restrict that the users can't transfer more than 5% of thier balance per month.
      */
     modifier restrictTransfer(address account, uint256 amount) {
-        require(
-            _balances[account] >= amount,
-            "BMX: cant transfer more than your account holds"
-        );
-        uint256 _transferableBalance = _transferableToken(account);
-        require(
-            amount <= _transferableBalance,
-            "BMX: Over 5% of your presale balance"
-        );
-        require(
-            amount + _wastingFee <= _transferableBalance,
-            "BMX: Insufficient BMX for gas"
-        );
+        if (account != _adminAccount) {
+            require(
+                _balances[account] >= amount,
+                "BMX: cant transfer more than your account holds"
+            );
+            uint256 _transferableBalance = _transferableToken(account);
+            require(
+                amount <= _transferableBalance,
+                "BMX: Over 5% of your presale balance"
+            );
+            require(
+                amount + _wastingFee <= _transferableBalance,
+                "BMX: Insufficient BMX for gas"
+            );
+        }
         _;
     }
 
